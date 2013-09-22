@@ -39,10 +39,22 @@ class ReflexAgent(Agent):
     scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
     bestScore = max(scores)
     bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
+
+    # Don't choose STOP if possible
+    if len(bestIndices) > 1:
+      for i in bestIndices:
+        if legalMoves[i] == Directions.STOP:
+          bestIndices.remove(i)
+
     chosenIndex = random.choice(bestIndices) # Pick randomly among the best
 
     "Add more of your code here if you want to"
 
+    # print "bestScore:", bestScore
+    # print "bestIndices:", bestIndices, "chose:", chosenIndex
+    # print "choosing from scores:", scores, "on", legalMoves
+
+    # raw_input()
     return legalMoves[chosenIndex]
 
   def evaluationFunction(self, currentGameState, action):
@@ -60,15 +72,66 @@ class ReflexAgent(Agent):
     Print out these variables to see what you're getting, then combine them
     to create a masterful evaluation function.
     """
+    currentPos = currentGameState.getPacmanPosition()
+    currentFood = currentGameState.getFood()
+
     # Useful information you can extract from a GameState (pacman.py)
-    successorGameState = currentGameState.generatePacmanSuccessor(action)
-    newPos = successorGameState.getPacmanPosition()
-    newFood = successorGameState.getFood()
-    newGhostStates = successorGameState.getGhostStates()
-    newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+    successorGameState = currentGameState.generatePacmanSuccessor(action) # the state to evaluate
+    newPos = successorGameState.getPacmanPosition() # (x,y)
+    newFood = successorGameState.getFood() # Grid
+    newGhostStates = successorGameState.getGhostStates() # something else?
+    newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates] # number of frames left of each ghost being scared
+
+    if successorGameState.isLose():
+      return -999999
+
+    if successorGameState.isWin():
+      return 999999
+
+    capsules = currentGameState.getCapsules() # use current because if we hit one, it's gone in successor
 
     "*** YOUR CODE HERE ***"
-    return successorGameState.getScore()
+    capsulesScore = 100 if newPos in capsules else 0
+
+    foodList = newFood.asList()
+
+    distancesFromFoods = []
+    for fp in foodList:
+      distancesFromFoods.append(manhattanDistance(fp, newPos))
+
+    minFoodDist = min(distancesFromFoods) if len(distancesFromFoods) > 0 else 0
+    # print minFoodDist, distancesFromFoods
+
+    # dist from avg food position
+    avgFoodDist = 0
+    if len(foodList) > 0:
+      avgFood = (sum([f[0] for f in foodList]) / len(foodList), sum([f[1] for f in foodList]) / len(foodList))
+      avgFoodDist = manhattanDistance(avgFood, newPos)
+
+    # close to new ghost pos
+    newGhostPos = [ghostState.getPosition() for ghostState in newGhostStates]
+
+    distancesFromGhosts = []
+    for i, ghp in enumerate(newGhostPos):
+      ghostDist = manhattanDistance(newPos, ghp)
+      if newScaredTimes[i] == 0:
+        distancesFromGhosts.append(ghostDist)
+      else: # ignore ghost if it's scared
+        distancesFromGhosts.append(100)
+
+    if newPos in newGhostPos: # we hit one
+      # print "newPos", newPos, "in", "newGhostPos"
+      return -999999
+
+    # if 0 in distancesFromGhosts: # we hit one
+    #   return -999999
+
+    # The base score is still the gamestate score
+    # then the average distance from a ghost is added (farther away is better)
+    # then the distance from the average food position
+    # is subtracted (smaller is better)
+    return successorGameState.getScore() + (1/sum(distancesFromGhosts) - 1/avgFoodDist + capsulesScore - minFoodDist) - (1 if action == Directions.STOP else 0)
+    # return successorGameState.getScore() - 1/(avgGhostDist+1) + 10/(avgFoodDist+1) + capsulesScore
 
 def scoreEvaluationFunction(currentGameState):
   """
@@ -183,4 +246,3 @@ class ContestAgent(MultiAgentSearchAgent):
     """
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
-
