@@ -12,6 +12,9 @@ import random, util
 
 from game import Agent
 
+import pprint
+pp = pprint.PrettyPrinter(indent=2)
+
 class ReflexAgent(Agent):
   """
     A reflex agent chooses an action at each choice point by examining
@@ -73,7 +76,7 @@ class ReflexAgent(Agent):
     to create a masterful evaluation function.
     """
     currentPos = currentGameState.getPacmanPosition()
-    currentFood = currentGameState.getFood()
+    currentFood = currentGameState.getFood().asList()
 
     # Useful information you can extract from a GameState (pacman.py)
     successorGameState = currentGameState.generatePacmanSuccessor(action) # the state to evaluate
@@ -88,49 +91,20 @@ class ReflexAgent(Agent):
     if successorGameState.isWin():
       return 999999
 
-    capsules = currentGameState.getCapsules() # use current because if we hit one, it's gone in successor
-
-    "*** YOUR CODE HERE ***"
-    capsulesScore = 100 if newPos in capsules else 0
+    if action == Directions.STOP: # don't stop
+      return -999999
 
     foodList = newFood.asList()
 
-    distancesFromFoods = []
-    for fp in foodList:
-      distancesFromFoods.append(manhattanDistance(fp, newPos))
+    distancesFromFoods = [manhattanDistance(fp, newPos) for fp in foodList]
+    minFoodDist = min(distancesFromFoods) if len(distancesFromFoods) > 0 else 1
 
-    minFoodDist = min(distancesFromFoods) if len(distancesFromFoods) > 0 else 0
-    # print minFoodDist, distancesFromFoods
-
-    # dist from avg food position
-    avgFoodDist = 0
-    if len(foodList) > 0:
-      avgFood = (sum([f[0] for f in foodList]) / len(foodList), sum([f[1] for f in foodList]) / len(foodList))
-      avgFoodDist = manhattanDistance(avgFood, newPos)
-
-    # close to new ghost pos
     newGhostPos = [ghostState.getPosition() for ghostState in newGhostStates]
 
-    distancesFromGhosts = []
-    for i, ghp in enumerate(newGhostPos):
-      ghostDist = manhattanDistance(newPos, ghp)
-      if newScaredTimes[i] == 0:
-        distancesFromGhosts.append(ghostDist)
-      else: # ignore ghost if it's scared
-        distancesFromGhosts.append(100)
+    if newPos in currentFood:
+      return 999999
 
-    if newPos in newGhostPos: # we hit one
-      # print "newPos", newPos, "in", "newGhostPos"
-      return -999999
-
-    # if 0 in distancesFromGhosts: # we hit one
-    #   return -999999
-
-    # The base score is still the gamestate score
-    # then the average distance from a ghost is added (farther away is better)
-    # then the distance from the average food position
-    # is subtracted (smaller is better)
-    return successorGameState.getScore() + (1/sum(distancesFromGhosts) - 1/avgFoodDist + capsulesScore - minFoodDist) - (1 if action == Directions.STOP else 0)
+    return -minFoodDist
     # return successorGameState.getScore() - 1/(avgGhostDist+1) + 10/(avgFoodDist+1) + capsulesScore
 
 def scoreEvaluationFunction(currentGameState):
@@ -163,6 +137,7 @@ class MultiAgentSearchAgent(Agent):
     self.evaluationFunction = util.lookup(evalFn, globals())
     self.depth = int(depth)
 
+
 class MinimaxAgent(MultiAgentSearchAgent):
   """
     Your minimax agent (question 2)
@@ -189,7 +164,59 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns the total number of agents in the game
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #####################################################
+    def evalTreeKey(x):
+      return x[1] if isinstance(x, tuple) else x
+
+    def evaluateTree(gameState, agentIndex, currentDepth):
+      # print "Recursion at", currentDepth, "agent", agentIndex
+
+      legalMoves = gameState.getLegalActions(agentIndex)
+
+      try:
+        legalMoves.remove(Directions.STOP) # make it faster
+      except ValueError:
+        pass
+
+      nextAgentIndex = (agentIndex + 1) % gameState.getNumAgents()
+      nextDepth = currentDepth + (1 if nextAgentIndex == 0 else 0)
+
+
+      if nextAgentIndex == 0 and nextDepth > self.depth:
+        evalList = []
+        for m in legalMoves:
+          evalList.append(self.evaluationFunction(gameState))
+        try:
+          return max(evalList)
+        except ValueError:
+          return None
+
+      else:
+        evalTree = {}
+        for m in legalMoves:
+          successorGameState = gameState.generateSuccessor(agentIndex, m)
+          evalTree[m] = evaluateTree(successorGameState, nextAgentIndex, nextDepth)
+
+        evalTreeItems = evalTree.items()
+
+        # comment me
+        # return evalTree
+
+        try:
+          if agentIndex == 0:
+            return max(evalTreeItems, key=evalTreeKey)
+          else:
+            return min(evalTreeItems, key=evalTreeKey)
+        except ValueError:
+          return None
+    #####################################################
+
+    return evaluateTree(gameState, 0, 0)[0] #start at pacman id and depth 0
+
+    pp.pprint(evaluateTree(gameState, 0, 0))
+    while True:
+      pass
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
   """
