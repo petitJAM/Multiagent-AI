@@ -166,7 +166,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
     "*** YOUR CODE HERE ***"
     #####################################################
     def evalTreeKey(x):
-      return x[1] if isinstance(x, tuple) else x
+      return x[0] if isinstance(x, tuple) else x
 
     def evaluateTree(gameState, agentIndex, currentDepth):
       # print "Recursion at", currentDepth, "agent", agentIndex
@@ -181,41 +181,32 @@ class MinimaxAgent(MultiAgentSearchAgent):
       nextAgentIndex = (agentIndex + 1) % gameState.getNumAgents()
       nextDepth = currentDepth + (1 if nextAgentIndex == 0 else 0)
 
-
       if nextAgentIndex == 0 and nextDepth > self.depth:
         evalList = []
         for m in legalMoves:
-          evalList.append(self.evaluationFunction(gameState))
+          successorGameState = gameState.generateSuccessor(agentIndex, m)
+          evalList.append((self.evaluationFunction(successorGameState), m))
         try:
-          return max(evalList)
-        except ValueError:
-          return None
+          return min(evalList, key=evalTreeKey)
+        except ValueError: # empty
+          return self.evaluationFunction(gameState), "dummy"
 
       else:
-        evalTree = {}
+        evalList = []
         for m in legalMoves:
           successorGameState = gameState.generateSuccessor(agentIndex, m)
-          evalTree[m] = evaluateTree(successorGameState, nextAgentIndex, nextDepth)
-
-        evalTreeItems = evalTree.items()
-
-        # comment me
-        # return evalTree
-
-        try:
+          evalList.append((evaluateTree(successorGameState, nextAgentIndex, nextDepth)[0], m)) # the m in (_, m) is to track 
+                                                                                               # the move pacman should take 
+        try:                                                                                   # at the top level of the recursion
           if agentIndex == 0:
-            return max(evalTreeItems, key=evalTreeKey)
+            return max(evalList, key=evalTreeKey)
           else:
-            return min(evalTreeItems, key=evalTreeKey)
-        except ValueError:
-          return None
+            return min(evalList, key=evalTreeKey)
+        except ValueError: # empty
+          return self.evaluationFunction(gameState), "dummy"
     #####################################################
 
-    return evaluateTree(gameState, 0, 0)[0] #start at pacman id and depth 0
-
-    pp.pprint(evaluateTree(gameState, 0, 0))
-    while True:
-      pass
+    return evaluateTree(gameState, 0, 1)[1] #start at pacman id and depth 0
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
@@ -228,7 +219,25 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
       Returns the minimax action using self.depth and self.evaluationFunction
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def evaluateTree(gameState, agentIndex, currentDepth):
+      legalMoves = gameState.getLegalActions(agentIndex)
+      try:
+        legalMoves.remove(Directions.STOP) # make it faster
+      except ValueError:
+        pass
+
+      nextAgentIndex = (agentIndex + 1) % gameState.getNumAgents()
+      nextDepth = currentDepth + (1 if nextAgentIndex == 0 else 0)
+
+      if nextAgentIndex == 0 and nextDepth > self.depth:
+        # bottom
+        pass
+        
+      else:
+        # not bottom
+        pass
+
+    return evaluateTree(gameState, 0, 1)[1]
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
   """
