@@ -1,0 +1,212 @@
+Starting on 9-24 at 22:54:58
+
+Question q1
+===========
+
+Pacman emerges victorious! Score: 1253
+Pacman emerges victorious! Score: 1244
+Pacman emerges victorious! Score: 1235
+Pacman emerges victorious! Score: 1248
+Pacman emerges victorious! Score: 1235
+Pacman emerges victorious! Score: 1243
+Pacman emerges victorious! Score: 1241
+Pacman emerges victorious! Score: 1246
+Pacman emerges victorious! Score: 1252
+Pacman emerges victorious! Score: 1239
+Average Score: 1243.6
+Scores:        1253.0, 1244.0, 1235.0, 1248.0, 1235.0, 1243.0, 1241.0, 1246.0, 1252.0, 1239.0
+Win Rate:      10/10 (1.00)
+Record:        Win, Win, Win, Win, Win, Win, Win, Win, Win, Win
+*** PASS: test_cases\q1\grade-agent.test (3 of 3 points)
+***     1243.6 average score (2 of 2 points)
+***         Grading scheme:
+***          < 500:  0 points
+***         >= 500:  1 points
+***         >= 1000:  2 points
+***     10 games not timed out (0 of 0 points)
+***         Grading scheme:
+***          < 10:  fail
+***         >= 10:  0 points
+***     10 wins (1 of 1 points)
+***         Grading scheme:
+***          < 1:  fail
+***         >= 1:  0 points
+***         >= 5:  1 points
+
+### Question q1: 3/3 ###
+
+
+Question q2
+===========
+
+*** PASS: test_cases\q2\0-lecture-6-tree.test
+*** PASS: test_cases\q2\0-small-tree.test
+*** PASS: test_cases\q2\1-1-minmax.test
+*** PASS: test_cases\q2\1-2-minmax.test
+*** PASS: test_cases\q2\1-3-minmax.test
+*** PASS: test_cases\q2\1-4-minmax.test
+*** PASS: test_cases\q2\1-5-minmax.test
+*** PASS: test_cases\q2\1-6-minmax.test
+*** PASS: test_cases\q2\1-7-minmax.test
+*** PASS: test_cases\q2\1-8-minmax.test
+*** PASS: test_cases\q2\2-1a-vary-depth.test
+*** PASS: test_cases\q2\2-1b-vary-depth.test
+*** PASS: test_cases\q2\2-2a-vary-depth.test
+*** PASS: test_cases\q2\2-2b-vary-depth.test
+*** PASS: test_cases\q2\2-3a-vary-depth.test
+*** PASS: test_cases\q2\2-3b-vary-depth.test
+*** PASS: test_cases\q2\2-4a-vary-depth.test
+*** PASS: test_cases\q2\2-4b-vary-depth.test
+*** PASS: test_cases\q2\2-one-ghost-3level.test
+*** PASS: test_cases\q2\3-one-ghost-4level.test
+*** PASS: test_cases\q2\4-two-ghosts-3level.test
+*** PASS: test_cases\q2\5-two-ghosts-4level.test
+*** PASS: test_cases\q2\6-tied-root.test
+*** Running MinimaxAgent on smallClassic 1 time(s).
+Pacman died! Score: -66
+Average Score: -66.0
+Scores:        -66.0
+Win Rate:      0/1 (0.00)
+Record:        Loss
+*** Finished running MinimaxAgent on smallClassic after 1 seconds.
+*** Won 0 out of 1 games. Average score: -66.000000 ***
+*** PASS: test_cases\q2\7-pacman-game.test
+
+### Question q2: 4/4 ###
+
+
+Question q3
+===========
+
+*** PASS: test_cases\q3\0-lecture-6-tree.test
+*** PASS: test_cases\q3\0-small-tree.test
+*** PASS: test_cases\q3\1-1-minmax.test
+*** PASS: test_cases\q3\1-2-minmax.test
+*** PASS: test_cases\q3\1-3-minmax.test
+*** PASS: test_cases\q3\1-4-minmax.test
+*** PASS: test_cases\q3\1-5-minmax.test
+*** PASS: test_cases\q3\1-6-minmax.test
+*** PASS: test_cases\q3\1-7-minmax.test
+*** PASS: test_cases\q3\1-8-minmax.test
+*** PASS: test_cases\q3\2-1a-vary-depth.test
+*** PASS: test_cases\q3\2-1b-vary-depth.test
+*** PASS: test_cases\q3\2-2a-vary-depth.test
+*** PASS: test_cases\q3\2-2b-vary-depth.test
+*** PASS: test_cases\q3\2-3a-vary-depth.test
+*** PASS: test_cases\q3\2-3b-vary-depth.test
+*** PASS: test_cases\q3\2-4a-vary-depth.test
+*** PASS: test_cases\q3\2-4b-vary-depth.test
+*** PASS: test_cases\q3\2-one-ghost-3level.test
+*** PASS: test_cases\q3\3-one-ghost-4level.test
+*** PASS: test_cases\q3\4-two-ghosts-3level.test
+*** PASS: test_cases\q3\5-two-ghosts-4level.test
+*** FAIL: test_cases\q3\6-tied-root.test
+***     Incorrect generated nodes for depth=3
+***         Student generated nodes: A B max min1 min2
+***         Correct generated nodes: A B C max min1 min2
+***     Tree:
+***         max
+***        /   \
+***     min1    min2
+***      |      /  \
+***      A      B   C
+***     10     10   0
+*** Running AlphaBetaAgent on smallClassic 1 time(s).
+Pacman died! Score: -66
+Average Score: -66.0
+Scores:        -66.0
+Win Rate:      0/1 (0.00)
+Record:        Loss
+*** Finished running AlphaBetaAgent on smallClassic after 1 seconds.
+*** Won 0 out of 1 games. Average score: -66.000000 ***
+*** FAIL: test_cases\q3\7-pacman-game.test
+***     Bug: Wrong number of states expanded.
+*** Tests failed.
+
+### Question q3: 0/4 ###
+
+
+Question q4
+===========
+
+*** PASS: test_cases\q4\0-expectimax1.test
+*** PASS: test_cases\q4\1-expectimax2.test
+*** PASS: test_cases\q4\2-one-ghost-3level.test
+*** PASS: test_cases\q4\3-one-ghost-4level.test
+*** PASS: test_cases\q4\4-two-ghosts-3level.test
+*** PASS: test_cases\q4\5-two-ghosts-4level.test
+*** Running ExpectimaxAgent on smallClassic 1 time(s).
+Pacman died! Score: 316
+Average Score: 316.0
+Scores:        316.0
+Win Rate:      0/1 (0.00)
+Record:        Loss
+*** Finished running ExpectimaxAgent on smallClassic after 1 seconds.
+*** Won 0 out of 1 games. Average score: 316.000000 ***
+*** PASS: test_cases\q4\6-pacman-game.test
+
+### Question q4: 4/4 ###
+
+
+Question q5
+===========
+
+Pacman emerges victorious! Score: 1137
+Pacman emerges victorious! Score: 1087
+Pacman emerges victorious! Score: 1133
+Pacman emerges victorious! Score: 1119
+Pacman emerges victorious! Score: 941
+Pacman emerges victorious! Score: 1141
+Pacman emerges victorious! Score: 1061
+Pacman emerges victorious! Score: 1061
+Pacman emerges victorious! Score: 1152
+Pacman emerges victorious! Score: 1019
+Average Score: 1085.1
+Scores:        1137.0, 1087.0, 1133.0, 1119.0, 941.0, 1141.0, 1061.0, 1061.0, 1152.0, 1019.0
+Win Rate:      10/10 (1.00)
+Record:        Win, Win, Win, Win, Win, Win, Win, Win, Win, Win
+*** PASS: test_cases\q5\grade-agent.test (5 of 5 points)
+***     1085.1 average score (2 of 2 points)
+***         Grading scheme:
+***          < 500:  0 points
+***         >= 500:  1 points
+***         >= 1000:  2 points
+***     10 games not timed out (1 of 1 points)
+***         Grading scheme:
+***          < 0:  fail
+***         >= 0:  0 points
+***         >= 10:  1 points
+***     10 wins (2 of 2 points)
+***         Grading scheme:
+***          < 1:  fail
+***         >= 1:  1 points
+***         >= 5:  2 points
+
+### Question q5: 5/5 ###
+
+
+Question extra
+==============
+
+*** Method not implemented: getAction at line 463 of multiAgents.py
+*** FAIL: Terminated with a string exception.
+
+### Question extra: 0/0 ###
+
+
+Finished at 22:56:11
+
+Provisional grades
+==================
+Question q1: 3/3
+Question q2: 4/4
+Question q3: 0/4
+Question q4: 4/4
+Question q5: 5/5
+Question extra: 0/0
+------------------
+Total: 16/20
+
+Your grades are NOT yet registered.  To register your grades, make sure
+to follow your instructor's guidelines to receive credit on your project.
+

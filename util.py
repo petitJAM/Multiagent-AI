@@ -173,14 +173,14 @@ class PriorityQueue:
     def push(self, item, priority):
         # FIXME: restored old behaviour to check against old results better
         # FIXED: restored to stable behaviour
-        entry = (priority, self.count, item)
-        # entry = (priority, item)
+        # entry = (priority, self.count, item)
+        entry = (priority, item)
         heapq.heappush(self.heap, entry)
         self.count += 1
 
     def pop(self):
-        (_, _, item) = heapq.heappop(self.heap)
-        #  (_, item) = heapq.heappop(self.heap)
+        # (_, _, item) = heapq.heappop(self.heap)
+        (_, item) = heapq.heappop(self.heap)
         return item
 
     def isEmpty(self):
